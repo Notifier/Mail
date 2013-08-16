@@ -10,7 +10,9 @@
 
 namespace Notifier\Handler;
 
+use Notifier\Message\Message;
 use Notifier\Notifier;
+use Notifier\Recipient\Recipient;
 
 /**
  * @author Dries De Peuter <dries@nousefreak.be>
@@ -21,11 +23,6 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      * @var Notifier
      */
     protected $notifier;
-
-    /**
-     * @var \Swift_Plugins_Loggers_ArrayLogger
-     */
-    protected $logger;
 
     public function setUp()
     {
@@ -45,22 +42,21 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRecipientFilterSuccess()
     {
-        // TODO proper tests
-//        rename_function('mail', 'mail_orig');
-//        rename_function('mail_mock', 'mail');
-//
-//        $handler = new MailHandler();
-//        $this->notifier->pushHandler($handler);
-//
-//        $recipient = new Recipient('Me');
-//        $recipient->setInfo('email', 'name@domail.tld');
-//        $recipient->addType('test', 'mail');
-//
-//        $message = new Message('test');
-//        $message->setSubject('subject');
-//        $message->setContent('content');
-//        $message->addRecipient($recipient);
-//
-//        $this->notifier->sendMessage($message);
+		$stub = $this->getMock('Notifier\Handler\MailHandler', array('mail'));
+		$stub->expects($this->once())
+			->method('mail')
+			->will($this->returnValue(true));
+
+		$this->notifier->pushHandler($stub);
+
+		$recipient = new Recipient('Me');
+		$recipient->setInfo('email', 'name@domail.tld');
+		$recipient->addType('test', 'mail');
+
+		$message = new Message('test');
+		$message->setContent('content');
+		$message->addRecipient($recipient);
+
+		$this->notifier->sendMessage($message);
     }
 }

@@ -49,7 +49,7 @@ class MailHandler extends AbstractHandler
         $headers = implode("\r\n", $this->headers);
         $formatted = $message->getFormatted('mail');
 
-        return mail($to->getInfo('email'), $formatted['subject'], $formatted['content'], $headers);
+        return $this->mail($to->getInfo('email'), $formatted['subject'], $formatted['content'], $headers);
     }
 
     /**
@@ -71,4 +71,19 @@ class MailHandler extends AbstractHandler
     {
         return parent::getFormatter();
     }
+
+	/**
+	 * Send the mail
+	 *
+	 * @param $to
+	 * @param $subject
+	 * @param $message
+	 * @param null $headers
+	 * @param null $parameters
+	 * @return bool
+	 */
+	protected function mail($to, $subject, $message, $headers = null, $parameters = null)
+	{
+		return mail($to, $subject, $message, $headers, $parameters);
+	}
 }

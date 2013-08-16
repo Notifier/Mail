@@ -6,5 +6,3 @@ php:
 
 before_script:
   - composer install -n --dev --prefer-source
-  - pear channel-discover pear.phpunit.de
-  - pecl install phpunit/test_helpers
