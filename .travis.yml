@@ -1,0 +1,10 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+
+before_script:
+  - composer install -n --dev --prefer-source
+  - pear channel-discover pear.phpunit.de
+  - pecl install phpunit/test_helpers
