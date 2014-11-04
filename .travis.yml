@@ -13,5 +13,6 @@ php:
 before_script:
   - composer install -n --dev --prefer-source
   - gem install mailcatcher
+  - mkdir -p /home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - phpenv config-add tests/Resources/travis.php.ini
   - mailcatcher
