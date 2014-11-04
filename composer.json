@@ -14,12 +14,18 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "notifier/notifier": "~1.0"
+        "notifier/notifier": "~2.0@dev"
+    },
+    "require-dev": {
+        "guzzle/guzzle": "~3.9"
     },
     "autoload": {
-        "psr-0" : {
-            "Notifier" : "src/"
+        "psr-4" : {
+            "Notifier\\Mail\\" : "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": { "Notifier\\Tests\\": "tests/" }
     },
     "extra": {
         "branch-alias": {

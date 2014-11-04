@@ -1,8 +1,17 @@
 language: php
 
+os:
+  - linux
+
 php:
   - 5.3
   - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
 
 before_script:
   - composer install -n --dev --prefer-source
+  - gem install mailcatcher
+  - echo 'sendmail_path = /usr/bin/env catchmail -f some@from.address' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - mailcatcher
