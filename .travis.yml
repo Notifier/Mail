@@ -13,5 +13,5 @@ php:
 before_script:
   - composer install -n --dev --prefer-source
   - gem install mailcatcher
-  - echo 'sendmail_path = /usr/bin/env catchmail -f some@from.address' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - phpenv config-add tests/Resources/travis.php.ini
   - mailcatcher
