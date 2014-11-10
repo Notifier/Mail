@@ -52,6 +52,16 @@ class MailChannel implements ChannelInterface
         );
     }
 
+    /**
+     * Send the message.
+     *
+     * @param string $to
+     * @param string $subject
+     * @param string $message
+     * @param array $headers
+     * @param array $parameters
+     * @return bool
+     */
     private function mail($to, $subject, $message, $headers = null, $parameters = null)
     {
         return mail($to, $subject, $message, $headers, $parameters);
@@ -66,71 +76,4 @@ class MailChannel implements ChannelInterface
     {
         return array();
     }
-
-//
-//    protected $deliveryType = 'mail';
-//
-//    /**
-//     * @var array
-//     */
-//    protected $headers;
-//
-//    /**
-//     * @param array|string $types   The types this handler handles.
-//     * @param array        $headers
-//     * @param boolean      $bubble  Whether the messages that are handled can bubble up the stack or not
-//     */
-//    public function __construct($types = Notifier::TYPE_ALL, $headers = array(), $bubble = true)
-//    {
-//        $this->setTypes($types);
-//        $this->headers = $headers;
-//        $this->bubble = $bubble;
-//    }
-//
-//    /**
-//     * {@inheritDocs}
-//     */
-//    protected function sendOne(MessageInterface $message, RecipientInterface $recipient)
-//    {
-//        $to = $recipient;
-//        $headers = implode("\r\n", $this->headers);
-//        $formatted = $message->getFormatted('mail');
-//
-//        return $this->mail($to->getInfo('email'), $formatted['subject'], $formatted['content'], $headers);
-//    }
-//
-//    /**
-//     * Gets the formatter.
-//     *
-//     * @return FormatterInterface
-//     */
-//    public function getDefaultFormatter()
-//    {
-//        return new MailFormatter();
-//    }
-//
-//    /**
-//     * Get the formatter. This will use the default as a fallback.
-//     *
-//     * @return MailFormatter
-//     */
-//    public function getFormatter()
-//    {
-//        return parent::getFormatter();
-//    }
-//
-//	/**
-//	 * Send the mail
-//	 *
-//	 * @param $to
-//	 * @param $subject
-//	 * @param $message
-//	 * @param null $headers
-//	 * @param null $parameters
-//	 * @return bool
-//	 */
-//	protected function mail($to, $subject, $message, $headers = null, $parameters = null)
-//	{
-//		return mail($to, $subject, $message, $headers, $parameters);
-//	}
 }
