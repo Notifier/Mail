@@ -11,6 +11,8 @@
 namespace Notifier\Mail;
 
 use Notifier\Channel\ChannelInterface;
+use Notifier\Mail\ParameterBag\MailMessageParameterBag;
+use Notifier\Mail\ParameterBag\MailRecipientParameterBag;
 use Notifier\Message\MessageInterface;
 use Notifier\Processor\ProcessorInterface;
 use Notifier\Recipient\RecipientInterface;
@@ -21,17 +23,30 @@ use Notifier\Recipient\RecipientInterface;
 class MailChannel implements ChannelInterface
 {
     /**
+     * @const string
+     */
+    const IDENTIFIER = 'notifier_mail';
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return self::IDENTIFIER;
+    }
+
+    /**
      * Test if the channel can send the message given the supplied parameters.
      *
      * @param  MessageInterface   $message
      * @param  RecipientInterface $recipient
+     *
      * @return bool
      */
     public function isHandling(MessageInterface $message, RecipientInterface $recipient)
     {
-        return isset($recipient->mail_to)
-            && isset($message->mail_subject)
-            && isset($message->mail_body);
+        return $message->hasParameterBag($this->getIdentifier())
+            && $recipient->hasParameterBag($this->getIdentifier());
     }
 
     /**
@@ -39,17 +54,45 @@ class MailChannel implements ChannelInterface
      *
      * @param  MessageInterface   $message
      * @param  RecipientInterface $recipient
+     *
      * @return bool
      */
     public function send(MessageInterface $message, RecipientInterface $recipient)
     {
+        $recipientBag = $this->getRecipientBag($recipient);
+        $messageBag = $this->getMessageBag($message);
+
         return $this->mail(
-            $recipient->mail_to,
-            $message->mail_subject,
-            $message->mail_body,
-            isset($message->mail_headers) ? $message->mail_headers : null,
-            isset($message->mail_parameters) ? $message->mail_parameters : null
+            $recipientBag->getTo(),
+            $messageBag->getSubject(),
+            $messageBag->getBody(),
+            $messageBag->getHeaders(),
+            $messageBag->getParameters()
         );
+    }
+
+    /**
+     * Get the MailParameterBag from the recipient.
+     *
+     * @param \Notifier\Recipient\RecipientInterface $recipient
+     *
+     * @return MailRecipientParameterBag
+     */
+    protected function getRecipientBag(RecipientInterface $recipient)
+    {
+        return $recipient->getParameterBag($this->getIdentifier());
+    }
+
+    /**
+     * Get the MailParameterBag from the message.
+     *
+     * @param \Notifier\Message\MessageInterface $message
+     *
+     * @return MailMessageParameterBag
+     */
+    protected function getMessageBag(MessageInterface $message)
+    {
+        return $message->getParameterBag($this->getIdentifier());
     }
 
     /**
@@ -60,6 +103,7 @@ class MailChannel implements ChannelInterface
      * @param string $message
      * @param array $headers
      * @param array $parameters
+     *
      * @return bool
      */
     private function mail($to, $subject, $message, $headers = null, $parameters = null)

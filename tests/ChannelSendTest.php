@@ -11,6 +11,8 @@
 namespace Notifier\Tests;
 
 use Notifier\Mail\MailChannel;
+use Notifier\Mail\ParameterBag\MailMessageParameterBag;
+use Notifier\Mail\ParameterBag\MailRecipientParameterBag;
 use Notifier\Message\Message;
 use Notifier\Recipient\Recipient;
 use Notifier\Tests\Stubs\Type;
@@ -26,10 +28,10 @@ class ChannelSendTest extends EmailTestCase
         $channel = new MailChannel();
 
         $message = new Message(new Type());
-        $message->mail_subject = 'test subject';
-        $message->mail_body = 'body';
+        $message->addParameterBag(new MailMessageParameterBag('test subject', 'body'));
+
         $recipient = new Recipient();
-        $recipient->mail_to = 'test';
+        $recipient->addParameterBag(new MailRecipientParameterBag('test'));
 
         $channel->send($message, $recipient);
 

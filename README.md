@@ -5,6 +5,26 @@ This library adds standard php mail integration to [Notifier](https://github.com
 
 [![Build Status](https://secure.travis-ci.org/Notifier/Mail.png)](https://travis-ci.org/Notifier/Mail)
 
+## Example
+
+```php
+use Notifier\Mail\ParameterBag\MailMessageParameterBag;
+use Notifier\Mail\ParameterBag\MailRecipientParameterBag;
+use Notifier\Recipient\Recipient;
+use Notifier\Message\Message;
+use Notifier\Notifier;
+
+$message = new Message(new InformationType());
+$message->addParameterBag(new MailMessageParameterBag('Mail subject', 'Body...'));
+
+$recipient = new Recipient();
+$recipient->addParameterBag(new MailRecipientParameterBag('someone@example.com'));
+
+// The ChannelResolver will decide to which channels a message of a specific type must be sent.
+$notifier = new Notifier(new RecoverPasswordChannelResolver());
+$notifier->sendMessage($message, array($recipient));
+```
+
 ## Contributing
 
 > All code contributions - including those of people having commit access - must

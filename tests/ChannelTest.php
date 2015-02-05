@@ -11,8 +11,11 @@
 namespace Notifier\Tests;
 
 use Notifier\Mail\MailChannel;
+use Notifier\Mail\ParameterBag\MailMessageParameterBag;
+use Notifier\Mail\ParameterBag\MailRecipientParameterBag;
 use Notifier\Message\Message;
 use Notifier\Recipient\Recipient;
+use Notifier\Tests\Stubs\ParameterBag;
 use Notifier\Tests\Stubs\Type;
 
 /**
@@ -38,7 +41,10 @@ class ChannelTest extends \PHPUnit_Framework_TestCase
     public function testIsHandlingFail()
     {
         $message = new Message(new Type());
+        $message->addParameterBag(new MailMessageParameterBag('test', 'body'));
+
         $recipient = new Recipient();
+        $recipient->addParameterBag(new ParameterBag('wrong_identifier'));
 
         $this->assertFalse($this->channel->isHandling($message, $recipient));
     }
@@ -46,10 +52,10 @@ class ChannelTest extends \PHPUnit_Framework_TestCase
     public function testIsHandlingSuccess()
     {
         $message = new Message(new Type());
-        $message->mail_subject = 'test';
-        $message->mail_body = 'body';
+        $message->addParameterBag(new MailMessageParameterBag('test', 'body'));
+
         $recipient = new Recipient();
-        $recipient->mail_to = 'test';
+        $recipient->addParameterBag(new MailRecipientParameterBag('test'));
 
         $this->assertTrue($this->channel->isHandling($message, $recipient));
     }
