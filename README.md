@@ -21,7 +21,7 @@ $recipient = new Recipient();
 $recipient->addParameterBag(new MailRecipientParameterBag('someone@example.com'));
 
 // The ChannelResolver will decide to which channels a message of a specific type must be sent.
-$notifier = new Notifier(new RecoverPasswordChannelResolver());
+$notifier = new Notifier(new ChannelResolver());
 $notifier->sendMessage($message, array($recipient));
 ```
 
